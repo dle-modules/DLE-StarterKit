@@ -1,4 +1,6 @@
-.idea
+# Redactors
+.idea/
+
 # Installed DLE
 /engine/cache/*.tmp
 /engine/cache/system/*.php
