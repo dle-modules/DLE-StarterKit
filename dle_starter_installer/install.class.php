@@ -1,57 +1,86 @@
 <?php
 
 /**
- *
+ * Class dleStarterInstaller
  */
 class dleStarterInstaller {
 	public $dle_config = [];
 	public $cfg        = [];
-	public $tplOptions = [];
-	public $tpl;
-	public $db;
 
-	function __construct() {
-		// Подключаем конфиг DLE
+	private $engineDir = '';
+	private $moduleDir = '';
+	private $db;
+
+	function __construct($moduleName) {
+		// Определяем пути к папкам
+		$this->engineDir = dirname(__DIR__) . '/engine';
+		$this->moduleDir = $this->engineDir . '/modules/' . $moduleName;
+
+		// Определяем конфиги
 		$this->dle_config = $this->getDleConfig();
-
-		// Подключаем класс для работы с БД
+		$this->cfg = $this->getConfig();
 		$this->db = $this->getDb();
+
 	}
 
-	public static function getDleConfig() {
-		include ENGINE_DIR . '/data/config.php';
+	/**
+	 * @return array
+	 */
+	private function getDleConfig() {
+		include $this->engineDir . '/data/config.php';
 
 		/** @var array $config */
 		return $config;
 	}
 
 	/**
-	 * Отлавливаем данные о кодировке файла (utf-8 или windows-1251);
-	 *
-	 * @param  string $string - строка (или массив), в которой требуется определить кодировку.
-	 *
-	 * @return array          - возвращает массив с определением конфликта кодировки строки и сайта, а так же саму кодировку строки.
+	 * @return mixed
+	 * @throws Exception
 	 */
-	public function chasetConflict($string) {
-
-		if (is_array($string)) {
-			$string = implode(' ', $string);
+	private function getConfig() {
+		if (!file_exists($this->moduleDir . '/install/config.php')) {
+			return [];
+		} else {
+			return include $this->moduleDir . '/install/config.php';
 		}
-		$detect = preg_match('%(?:
-		[\xC2-\xDF][\x80-\xBF]             # non-overlong 2-byte
-		|\xE0[\xA0-\xBF][\x80-\xBF]        # excluding overlongs
-		|[\xE1-\xEC\xEE\xEF][\x80-\xBF]{2} # straight 3-byte
-		|\xED[\x80-\x9F][\x80-\xBF]        # excluding surrogates
-		|\xF0[\x90-\xBF][\x80-\xBF]{2}     # planes 1-3
-		|[\xF1-\xF3][\x80-\xBF]{3}         # planes 4-15
-		|\xF4[\x80-\x8F][\x80-\xBF]{2}     # plane 16
-		)+%xs', $string);
-		$stringCharset = ($detect == '1') ? 'utf-8' : 'windows-1251';
-		$this->dle_config['charset'] = strtolower($this->dle_config['charset']);
-		$return = [];
-		$return['conflict'] = ($stringCharset == $this->dle_config['charset']) ? false : true;
-		$return['charset'] = $stringCharset;
 
-		return $return;
 	}
-} ?>
+
+	/**
+	 * @return mixed
+	 */
+	private function getDb() {
+		include_once $this->engineDir . '/classes/mysql.php';
+		return include_once $this->engineDir . '/data/dbconfig.php';
+	}
+
+	/**
+	 * @throws Exception
+	 */
+	public function checkBeforeInstall() {
+		if (isset($this->cfg['minVersion'])) {
+			if ($this->dle_config['version_id'] < $this->cfg['minVersion']) {
+				throw new Exception('Установленная версия DLE слишком старая. Необходимо установить DLE не ниже ' . $this->cfg['minVersion']);
+			}
+
+			if ($this->dle_config['version_id'] > $this->cfg['maxVersion']) {
+				throw new Exception('Установленная версия DLE слишком новая. Необходимо установить DLE не выше ' . $this->cfg['maxVersion']);
+			}
+		} else {
+			throw new Exception('Файл с конфигурацией установки не найден, возмжно установочные файлы модуля не скопированы.');
+		}
+	}
+
+	/**
+	 * @return array
+	 */
+	public function gtSteps() {
+		$files = [];
+
+		foreach (glob($this->moduleDir . '/install/steps/*.php') as $file) {
+			$files[] = include_once($file);
+		}
+		return $files;
+	}
+
+}
