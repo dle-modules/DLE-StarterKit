@@ -1,5 +1,6 @@
 # Redactors
-.idea/
+/.idea/
+
 
 # Installed DLE
 /engine/cache/*.tmp
@@ -206,4 +207,5 @@
 /upgrade/*
 /uploads/*
 
-Place your custom files here
+# Place your custom files here
+
