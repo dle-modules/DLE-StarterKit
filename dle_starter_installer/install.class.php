@@ -27,23 +27,23 @@ class dleStarterInstaller {
 	 * @return array
 	 */
 	private function getDleConfig() {
-		include $this->engineDir . '/data/config.php';
+		include_once $this->engineDir . '/data/config.php';
 
 		/** @var array $config */
 		return $config;
 	}
 
+
 	/**
-	 * @return mixed
-	 * @throws Exception
+	 * @return array
 	 */
 	private function getConfig() {
-		if (!file_exists($this->moduleDir . '/install/config.php')) {
+		$configFile = $this->moduleDir . '/install/config.php';
+		if (!file_exists($configFile)) {
 			return [];
 		} else {
-			return include $this->moduleDir . '/install/config.php';
+			return include_once $configFile;
 		}
-
 	}
 
 	/**
@@ -55,9 +55,23 @@ class dleStarterInstaller {
 	}
 
 	/**
+	 * @param string $fileName
+	 * @return string
+	 */
+	public function getTextFile($fileName = 'licence') {
+		$configFile = $this->moduleDir . '/install/' . $fileName . '.php';
+		if (!file_exists($configFile)) {
+			return '';
+		} else {
+			return include_once $configFile;
+		}
+	}
+
+	/**
 	 * @throws Exception
 	 */
 	public function checkBeforeInstall() {
+		// @TODO перетащить текст в языковые файлы
 		if (isset($this->cfg['minVersion'])) {
 			if ($this->dle_config['version_id'] < $this->cfg['minVersion']) {
 				throw new Exception('Установленная версия DLE слишком старая. Необходимо установить DLE не ниже ' . $this->cfg['minVersion']);
@@ -67,20 +81,63 @@ class dleStarterInstaller {
 				throw new Exception('Установленная версия DLE слишком новая. Необходимо установить DLE не выше ' . $this->cfg['maxVersion']);
 			}
 		} else {
-			throw new Exception('Файл с конфигурацией установки не найден, возмжно установочные файлы модуля не скопированы.');
+			throw new Exception('Файл с конфигурацией установки модуля не найден, возмжно установочные файлы модуля не скопированы.');
 		}
 	}
 
 	/**
 	 * @return array
 	 */
-	public function gtSteps() {
+	public function getSteps() {
 		$files = [];
 
 		foreach (glob($this->moduleDir . '/install/steps/*.php') as $file) {
 			$files[] = include_once($file);
 		}
 		return $files;
+	}
+
+	/**
+	 * Установка административной части модуля
+	 * @param $name string        - название модуля, а именно файла .php находящегося в папке engine/inc/,
+	 * но без расширения файла
+	 * @param $title string        - заголовок модуля
+	 * @param $descr string        - описание модуля
+	 * @param $icon string        - имя иконки для модуля, без указания пути.
+	 * Иконка обязательно при этом должна находится в папке engine/skins/images/
+	 * @param $perm string        - информация о группах которым разрешен показ данного модуля.
+	 * Данное поле может принимать следующие значения: all или ID групп через запятую.
+	 * Например: 1,2,3. если указано значение all то модуль будет показываться всем
+	 * пользователям имеющим доступ в админпанель
+	 * @return bool - true если успешно установлено и false если нет
+	 */
+	public function installAdmin($name, $title, $descr, $icon, $perm = '1') {
+		$name = $this->db->safesql($name);
+		$title = $this->db->safesql($title);
+		$descr = $this->db->safesql($descr);
+		$icon = $this->db->safesql($icon);
+		$perm = $this->db->safesql($perm);
+		// Для начала проверяем наличие модуля
+		$this->db->query("SELECT name FROM`" . PREFIX . "_admin_sections` where name = '$name'");
+		if ($this->db->num_rows() > 0) {
+			// Модуль есть, обновляем данные
+			$this->db->query("UPDATE `" . PREFIX . "_admin_sections` set title = '$title', descr = '$descr', icon = '$icon', allow_groups = '$perm' where name = '$name'");
+			return true;
+		} else {
+			// Модуля нету, добавляем
+			$this->db->query("INSERT INTO `" . PREFIX . "_admin_sections` (`name`, `title`, `descr`, `icon`, `allow_groups`) VALUES ('$name', '$title', '$descr', '$icon', '$perm')");
+			return true;
+		}
+	}
+
+	/**
+	 * Удаление административной части модуля
+	 * @param $name string - название модуля
+	 * @return null
+	 */
+	public function uninstallAdmin($name) {
+		$name = $this->db->safesql($name);
+		$this->db->query("DELETE FROM `" . PREFIX . "_admin_sections` where name = '$name'");
 	}
 
 }

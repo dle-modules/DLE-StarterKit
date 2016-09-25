@@ -353,7 +353,8 @@ input[type=number].input {
 
 textarea.code {
 	width: 100%;
-	margin: 10px 0;
+	margin: 0;
+	min-height: 42px;
 	vertical-align: top;
 	-webkit-transition: height .2s;
 	transition: height .2s;
@@ -534,14 +535,32 @@ h2 a:hover {
 	}
 }
 
-header .btn {
-	margin: 0 5px 8px 0;
-}
-
 .logo {
 	display: inline-block;
-	margin-top: 15px;
-	margin-bottom: 15px;
+	padding: 10px;
+	color: #fff;
+	font-size: 28px;
+}
+
+.logo .icon {
+	vertical-align: text-top;
+	color: #3584a7;
+}
+
+.licence-text {
+	max-height: 55vh;
+	overflow: auto;
+	border: solid 1px #d4dfe3;
+	padding: 15px;
+}
+
+.step-element {
+	margin-top: 10px;
+}
+
+.step-header {
+	font-size: 18px;
+	color: #4a9fc5;
 }
 
 .margin-list > li {
@@ -683,9 +702,16 @@ img.ta-center {
 .pt0 {
 	padding-top: 0;
 }
+.pr0 {
+	padding-right: 0;
+}
 
 .pb0 {
 	padding-bottom: 0;
+}
+
+.pl0 {
+	padding-left: 0;
 }
 
 .text-muted {
@@ -747,4 +773,13 @@ img.ta-center {
 
 .ov-h {
 	overflow: hidden;
+}
+
+.icon {
+	display: inline-block;
+	width: 1em;
+	height: 1em;
+	stroke-width: 0;
+	stroke: currentColor;
+	fill: currentColor;
 }

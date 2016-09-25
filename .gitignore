@@ -181,7 +181,7 @@
 /engine/skins/codemirror/js/code.js
 /engine/skins/default.skin.php
 /engine/skins/fonts/*
-/engine/skins/images/
+/engine/skins/images/*
 /engine/skins/javascripts/application.js
 /engine/skins/stylesheets/application.css
 /engine/skins/stylesheets/frame.css
@@ -209,3 +209,4 @@
 
 # Place your custom files here
 
+!/engine/skins/images/dle_starter.png
