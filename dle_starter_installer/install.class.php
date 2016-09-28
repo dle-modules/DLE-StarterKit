@@ -140,4 +140,20 @@ class dleStarterInstaller {
 		$this->db->query("DELETE FROM `" . PREFIX . "_admin_sections` where name = '$name'");
 	}
 
+	/**
+	 * Заменяем некоторые теги на их представления по аналогии с DLE
+	 *
+	 * @param string $text
+	 * @param string $openBrace
+	 * @param string $closeBrace
+	 * @return string
+	 */
+	public function replaceTags($text = '', $openBrace = '%', $closeBrace = '%') {
+		// Заменяем %THEME%
+		$text = str_replace($openBrace . 'THEME' . $closeBrace, 'templates/' . $this->dle_config['skin'], $text);
+		
+		return $text;
+
+	}
+
 }

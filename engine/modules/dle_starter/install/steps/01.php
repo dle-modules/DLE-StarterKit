@@ -2,28 +2,25 @@
 return [
 
 	// Заголовок щага
-	'header' => 'шаг 1',
+	'header' => 'Добавление стилей и скриптов модуля',
 
 	// Текст с описанием шага шага
-	'text' => 'Делай раз!',
+	'text' => 'В шаблоне <b>%THEME%/main.tpl</b>',
+
+	// Код, который необходимо вставить
+	// 'paste' => 'someCode to paste',
 
 	// Код, который необходимо найти
-	'find' => 'someCode',
+	'find' => '</head>',
 
 	// Код, который необходимо вставить перед найденным
-	// 'addBfore' => 'someCode to add before',
+	'addBfore' => '<link rel="stylesheet" href="{THEME}/dle_starter/css/starter.css">
+<script src="{THEME}/dle_starter/js/starter.js"></script>',
 
 	// Код, который необходимо вставить после найденного
-	'addAfter' => 'someCode to add after',
+	// 'addAfter' => 'someCode to add after',
+
 
 	// Код, которым необходимо заменить найденное
-	// 'replace' => 'someCode to replace',
-
-	// Запросы, которые будут выполнены на этом шаге
-	'queries' => 'CREATE TABLE IF NOT EXISTS `' . PREFIX . '_starter_test` (
-  `id` tinyint(6) NOT NULL AUTO_INCREMENT,
-  `name` varchar(255) NOT NULL,
-  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
-  PRIMARY KEY (`id`)
-);'
+	// 'replace' => 'someCode to replace'
 ];
