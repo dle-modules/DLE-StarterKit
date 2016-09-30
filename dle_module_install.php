@@ -32,6 +32,8 @@ try {
 
 	$contacts = $installer->getTextFile('contacts');
 
+	$queries = $installer->getTextFile('queries');
+
 	if ($licence !== '') {
 		if (isset($_POST['notaccept'])) {
 			$output = <<<HTML
@@ -128,7 +130,6 @@ HTML;
 
 		}
 
-		$queries = $installer->getTextFile('queries');
 		$queriesTxt = $queriesBtn = '';
 		if (count($queries)) {
 			$arQueries = [];
@@ -151,7 +152,6 @@ HTML;
 HTML;
 				$queriesTxt = implode('', $arQueries);
 			}
-
 		}
 
 		$output .= <<<HTML
@@ -168,6 +168,45 @@ HTML;
 					{$queriesTxt}
 				</div>
 			</div>
+HTML;
+	}
+
+	if ($_POST['accept'] && $_POST['install']) {
+		$installedMessages = [];
+
+		if (count($queries)) {
+			/** @var array $queries */
+			foreach ($queries as $queryItem) {
+				$installer->db->query($queryItem);
+			}
+			$installer->db->free();
+
+			$installedMessages[] = '<li>Запросы успешно выполнены.</li>';
+		}
+
+		if ($installer->cfg['installAdmin']) {
+			$name = $installer->cfg['moduleName'];
+			$title = $installer->cfg['moduleTitle'];
+			$descr = $installer->cfg['moduleDescr'];
+			$icon = $name . '.png';
+			$perm = $installer->cfg['allowGroups'];
+			$installer->installAdmin($name, $title, $descr, $icon, $perm);
+
+			$installedMessages[] = '<li>Админка модуля установлена.</li>';
+		}
+
+		$installedMessagesText = implode('', $installedMessages);
+
+		$output = <<<HTML
+		<h1>Установка завершена</h1>
+		<div class="alert">
+			<ul>
+				{$installedMessagesText}
+			</ul>
+
+			Не забудьте удалить с сервера файл <b>dle_module_install.php</b> и папку <b>dle_starter_installer</b>
+ 		</div>
+
 HTML;
 	}
 

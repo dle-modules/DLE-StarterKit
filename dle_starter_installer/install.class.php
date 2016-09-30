@@ -1,16 +1,46 @@
 <?php
+/*
+ * DLE-StarterKit
+ *
+ * @author     ПафНутиЙ <pafnuty10@gmail.com>
+ * @link       https://git.io/vPLpe
+ */
+
 
 /**
  * Class dleStarterInstaller
  */
 class dleStarterInstaller {
+	/**
+	 * @var array
+	 */
 	public $dle_config = [];
-	public $cfg        = [];
 
-	private $engineDir = '';
-	private $moduleDir = '';
-	private $db;
+	/**
+	 * @var array
+	 */
+	public $cfg = [];
 
+	/**
+	 * @var string
+	 */
+	public $engineDir = '';
+
+	/**
+	 * @var string
+	 */
+	public $moduleDir = '';
+
+	/**
+	 * @var mixed
+	 */
+	public $db;
+
+	/**
+	 * dleStarterInstaller constructor.
+	 *
+	 * @param $moduleName
+	 */
 	function __construct($moduleName) {
 		// Определяем пути к папкам
 		$this->engineDir = dirname(__DIR__) . '/engine';
@@ -51,11 +81,15 @@ class dleStarterInstaller {
 	 */
 	private function getDb() {
 		include_once $this->engineDir . '/classes/mysql.php';
-		return include_once $this->engineDir . '/data/dbconfig.php';
+		include_once $this->engineDir . '/data/dbconfig.php';
+
+		/** @var object $db */
+		return $db;
 	}
 
 	/**
 	 * @param string $fileName
+	 *
 	 * @return string
 	 */
 	public function getTextFile($fileName = 'licence') {
@@ -99,16 +133,18 @@ class dleStarterInstaller {
 
 	/**
 	 * Установка административной части модуля
-	 * @param $name string        - название модуля, а именно файла .php находящегося в папке engine/inc/,
-	 * но без расширения файла
-	 * @param $title string        - заголовок модуля
-	 * @param $descr string        - описание модуля
-	 * @param $icon string        - имя иконки для модуля, без указания пути.
-	 * Иконка обязательно при этом должна находится в папке engine/skins/images/
-	 * @param $perm string        - информация о группах которым разрешен показ данного модуля.
-	 * Данное поле может принимать следующие значения: all или ID групп через запятую.
-	 * Например: 1,2,3. если указано значение all то модуль будет показываться всем
-	 * пользователям имеющим доступ в админпанель
+	 *
+	 * @param $name  string название модуля, а именно файла .php находящегося в папке engine/inc/,
+	 *               но без расширения файла
+	 * @param $title string заголовок модуля
+	 * @param $descr string описание модуля
+	 * @param $icon  string имя иконки для модуля, без указания пути.
+	 *               Иконка обязательно при этом должна находится в папке engine/skins/images/
+	 * @param $perm  string информация о группах которым разрешен показ данного модуля.
+	 *               Данное поле может принимать следующие значения: all или ID групп через запятую.
+	 *               Например: 1,2,3. если указано значение all то модуль будет показываться всем
+	 *               пользователям имеющим доступ в админпанель
+	 *
 	 * @return bool - true если успешно установлено и false если нет
 	 */
 	public function installAdmin($name, $title, $descr, $icon, $perm = '1') {
@@ -124,7 +160,7 @@ class dleStarterInstaller {
 			$this->db->query("UPDATE `" . PREFIX . "_admin_sections` set title = '$title', descr = '$descr', icon = '$icon', allow_groups = '$perm' where name = '$name'");
 			return true;
 		} else {
-			// Модуля нету, добавляем
+			// Модуля нет, добавляем
 			$this->db->query("INSERT INTO `" . PREFIX . "_admin_sections` (`name`, `title`, `descr`, `icon`, `allow_groups`) VALUES ('$name', '$title', '$descr', '$icon', '$perm')");
 			return true;
 		}
@@ -132,7 +168,9 @@ class dleStarterInstaller {
 
 	/**
 	 * Удаление административной части модуля
+	 *
 	 * @param $name string - название модуля
+	 *
 	 * @return null
 	 */
 	public function uninstallAdmin($name) {
@@ -146,12 +184,13 @@ class dleStarterInstaller {
 	 * @param string $text
 	 * @param string $openBrace
 	 * @param string $closeBrace
+	 *
 	 * @return string
 	 */
 	public function replaceTags($text = '', $openBrace = '%', $closeBrace = '%') {
 		// Заменяем %THEME%
 		$text = str_replace($openBrace . 'THEME' . $closeBrace, 'templates/' . $this->dle_config['skin'], $text);
-		
+
 		return $text;
 
 	}

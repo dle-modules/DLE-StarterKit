@@ -1,4 +1,15 @@
 <?php
+/*
+ * DLE-Starter — "Hello Word" модуль для DLE
+ *
+ * @author     ПафНутиЙ <pafnuty10@gmail.com>
+ * @link       https://git.io/vPLpe
+ */
+
+
+/**
+ * Конфигурация установщика модуля
+ */
 return [
 	// Идентификатор модуля (он же имя иконки модуля в адмике)
 	'moduleName'    => 'dle_starter',
@@ -13,7 +24,7 @@ return [
 	'moduleVersion' => '1.0.0',
 
 	// Дата выпуска модуля
-	'moduleDate'    => '26.09.2016',
+	'moduleDate'    => '01.10.2016',
 
 	// Версии DLE, поддержваемые модулем
 	'minVersion'    => '10.6',
