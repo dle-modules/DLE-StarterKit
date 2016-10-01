@@ -131,7 +131,8 @@ HTML;
 		}
 
 		$queriesTxt = $queriesBtn = '';
-		if (count($queries)) {
+
+		if (is_array($queries) && count($queries)) {
 			$arQueries = [];
 			$queriesBtn = '<span id="wtq" class="btn btn-normal btn-border btn-gray">Какие запросы будут выполнены?</span>';
 			/** @var array $queries */
