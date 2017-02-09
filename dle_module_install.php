@@ -23,6 +23,7 @@ $stepsHeadings = [
 ];
 
 $contacts = '';
+$output = '';
 
 try {
 	$installer->checkBeforeInstall();
@@ -172,7 +173,7 @@ HTML;
 HTML;
 	}
 
-	if ($_POST['accept'] && $_POST['install']) {
+	if (isset($_POST['accept']) && isset($_POST['install'])) {
 		$installedMessages = [];
 
 		if (count($queries)) {
