@@ -26,7 +26,7 @@ return [
 	'find' => '</head>',
 
 	// Код, который необходимо вставить перед найденным
-	'addBfore' => '<link rel="stylesheet" href="{THEME}/dle_starter/css/starter.css">
+	'addBefore' => '<link rel="stylesheet" href="{THEME}/dle_starter/css/starter.css">
 <script src="{THEME}/dle_starter/js/starter.js"></script>',
 
 	// Код, который необходимо вставить после найденного
