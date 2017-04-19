@@ -207,6 +207,16 @@
 /upgrade/*
 /uploads/*
 
+# DLE 11.3 sources
+/engine/ajax/commentssubscribe.php
+/engine/ajax/twofactor.php
+/engine/classes/htmlpurifier/*
+/engine/classes/memcache.class.php
+/engine/inc/lostpassword.php
+/engine/inc/redirects.php
+/engine/inc/twofactor.php
+
+
 # Place your custom files here
 
 !/engine/skins/images/dle_starter.png

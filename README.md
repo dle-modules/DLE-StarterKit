@@ -1,6 +1,6 @@
 # DataLife Engine Starter Kit
 
-![version](https://img.shields.io/badge/version-1.0.2-red.svg?style=flat-square "Version")
+![version](https://img.shields.io/badge/version-1.0.3-red.svg?style=flat-square "Version")
 ![DLE](https://img.shields.io/badge/DLE-11.X-green.svg?style=flat-square "DLE Version")
 [![MIT License](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://github.com/dle-modules/DLE-StarterKit/blob/master/LICENSE)
 
@@ -23,7 +23,8 @@ DLE Starter Kit — это готовый набор для разработки
 1. Склонировать репозиторий.
 2. Распаковать в эту же папку исходники DLE 11 и выполнить установку по инструкции от CMS.
 3. Выполнить установку модуля (dle_module_install.php)
-3. Начать разработку своего модуля на основе заготовки.
+4. Начать разработку своего модуля на основе заготовки.
+5. Не забываем добавить в исключения .gitignore файлы разрабатываемого модуля 
 
 
 
