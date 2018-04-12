@@ -216,6 +216,13 @@
 /engine/inc/redirects.php
 /engine/inc/twofactor.php
 
+# DLE 12 sources
+/engine/inc/metatags.php
+/language/English/admincheck.lng
+/language/English/adminlogs.lng
+/language/English/adminpanel.lng
+/language/English/help.lng
+/language/English/website.lng
 
 # Place your custom files here
 
